@@ -3,6 +3,8 @@ variables:
   value: openaml
 - name: aml_workspace
   value: nlp_workspace
+- name: service_connection
+  value: 'Azure-ARM-Prod'
 
 trigger:
 - none
@@ -12,9 +14,23 @@ jobs:
    pool:
      vmImage: ubuntu-20.04
    steps:
-      - task: AzureCLI@2
-        inputs:
-            azureSubscription: 'Azure-ARM-Prod'
+    - task: AzureCLI@2
+      displayName: Install AML CLI v2
+      inputs:
+        azureSubscription: $(service_connection)
+        scriptType: bash
+        scriptLocation: inlineScript
+        workingDirectory: $(System.DefaultWorkingDirectory)
+        inlineScript: |
+          set -e # fail on error
+          az version
+          az extension add -n ml -y
+          az extension update -n ml
+          az extension list
+    - task: AzureCLI@2
+      displayName: Connect to Workspace
+      inputs:
+            azureSubscription: $(service_connection)
             scriptType: 'bash'
             scriptLocation: 'inlineScript'
             inlineScript: |
@@ -24,3 +40,11 @@ jobs:
               JSON_STRING=$'{\n\t"subscription_id": "%s",\n\t"resource_group": "%s",\n\t"workspace_name": "%s"\n}'
               printf "$JSON_STRING" "$currentId" "$(resource_group)" "$(aml_workspace)"
               printf "$JSON_STRING" "$currentId" "$(resource_group)" "$(aml_workspace)" > config.json
+    - task: AzureCLI@2
+      displayName: List Models
+      inputs:
+            azureSubscription: $(service_connection)
+            scriptType: 'bash'
+            scriptLocation: 'inlineScript'
+            inlineScript: |
+              az ml model list 
