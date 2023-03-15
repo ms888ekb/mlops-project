@@ -15,7 +15,7 @@ jobs:
       - task: AzureCLI@2
         inputs:
             azureSubscription: 'Azure-ARM-Prod'
-            scriptType: 'batch'
+            scriptType: 'bash'
             scriptLocation: 'inlineScript'
             inlineScript: |
               az configure --defaults group=$(resource_group) workspace=$(aml_workspace)
