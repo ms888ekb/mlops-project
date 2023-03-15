@@ -2,7 +2,7 @@ variables:
 - name: resource_group
   value: openaml
 - name: aml_workspace
-  value: nlp_workspace
+  value: nlp-workspace
 - name: service_connection
   value: 'Azure-ARM-Prod'
 
