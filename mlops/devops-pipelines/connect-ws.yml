@@ -1,10 +1,11 @@
 variables:
 - name: resource_group
-  value: openaml
+  value: rg-nrcan-cmss-digital-accelerator-team-sandbox
 - name: aml_workspace
-  value: nlp-workspace
+  value: remotepowerwksp
 - name: service_connection
-  value: 'Azure-ARM-Prod'
+  value: digital accelerator
+
 
 trigger:
 - none
